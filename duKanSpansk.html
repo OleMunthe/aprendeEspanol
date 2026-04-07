@@ -1,141 +1,130 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <title>Hva betyr det?</title>
-    
-    <style>
-            #levels {
-            margin-bottom: 20px;
-            }
+<meta charset="UTF-8">
+<title>Hva betyr det?</title>
 
-            #levels button {
-            margin-right: 10px;
-            }
-        
-    body {
-        font-family: Arial, sans-serif;
-        background: #6b0f1a; /* mørkerød */
-        margin: 0;
-        min-height: 100vh;
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #6b0f1a; /* mørkerød */
+    margin: 0;
+    min-height: 100vh;
 
-        display: flex;
-        justify-content: center; /* horisontalt */
-        align-items: center;     /* vertikalt */
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        
-    #box {
-        background: white;
-        padding: 20px;
-        max-width: 700px;
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        
-    }
+/* Ferdig-tekst øverst */
+#done {
+    position: absolute;
+    top: -20px;        /* juster avstanden over boksen */
+    left: 50%;
+    transform: translateX(-50%);
 
-        input {padding: 8px; width: 100%; margin-top: 10px;}
-        button {margin-top: 10px; padding: 10px;}
-        #feedback {margin-top: 10px;font-weight: bold;}
-        #done {margin-top: 40px; font-size: 36px;font-weight: bold; text-align: center; }
-        
-    </style>
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+
+
+/* Spill på nytt-knapp */
+#restartBtn {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    font-size: 18px;
+    display: none;
+    z-index: 1000;
+}
+
+#box {
+    position: relative; /* viktig */
+    background: white;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+
+#levels {
+    margin-bottom: 20px;
+}
+
+#levels button {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+input {
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+</style>
 </head>
+
 <body>
-<p id="done"></p>
-    <button id="restartBtn" onclick="restartGame()" style="display:none;">
-            Spill på nytt
-        </button>
+
+<header>
+    <h1 id="done"></h1>
+    <button id="restartBtn" onclick="restartGame()">Spill på nytt</button>
+</header>
+
 <div id="box">
     <a href="https://olemunthe.github.io/aprendeEspanol/">Gå tilbake til hovedsiden</a>
+
+
+
+    <h2>Hva betyr ordet på norsk?</h2>
+    <p>Skriv ordet på norsk og trykk Enter. Bare små bokstaver.</p>
+
+    <p id="question"><strong>Velg antall ord for å starte</strongstrong></p>
         <div id="levels">
-        <p><strong>Velg nivå:</strong></p>
         <button onclick="startGame(10)">10 ord</button>
         <button onclick="startGame(20)">20 ord</button>
-        <button onclick="startGame(50)">50 ord</button>
-        </div>
-    <h2>Hva betyr ordet på norsk?</h2>
-    <p>Skriv ordet på norsk og trykk Enter. Bare bruk små bokstaver.</p>
-    <p id="question">Laster spørsmål…</p>
+        <button onclick="startGame(30)">30 ord</button>
+    </div>
     <input type="text" id="answer" placeholder="Ditt svar">
     <button onclick="checkAnswer()">Svar</button>
 
-    <p style="color: red;" id="feedback"></p>
+    <p id="feedback" style="color:red;"></p>
     <p id="stats"></p>
     <p id="final"></p>
 </div>
 
-
 <script>
 let allWords = [
-
 ["klassisk","clásico"],["komisk","cómico"],["økonomisk","económico"],
-["fysisk","físico"],["hysterisk","histérico"],["identisk","idéntico"],
-["mekanisk","mecánico"],["politisk","político"],["teknisk","técnico"],
-["typisk","típico"],["tropisk","trópical"],["magisk","mágico"],
-["historisk","histórico"],["praktisk","práctico"],["fantastisk","fantástico"],
-["atletisk","atlético"],["etisk","ético"],["geografisk","geográfico"],
-["psykologisk","psicológico"],["romantisk","romántico"],["sarkastisk","sarcástico"],
-["akademisk","académico"],["pragmatisk","pragmático"],["teknologisk","tecnológico"],
-["teoretisk","teorético"],["patetisk","patético"],["allergisk","alérgico"],
-["problematisk","problemático"],["optimistisk","optimístico"],["realistisk","realístico"],
-["estetisk","estético"],["demokratisk","democrático"],["kaotisk","caótico"],
-["elektrisk","eléctrico"],["kritisk","crítico"],["analytisk","analítico"],
-["statistisk","estadístico"],["hermetisk","hermético"],["hypotetisk","hipotético"],
-["drastisk","drástico"],["automatisk","automático"],["fanatisk","fanático"],
-["ironisk","irónico"],["magnetisk","magnético"],
-
-["artist","artista"],["kapitalist","capitalista"],["kommunist","comunista"],
-["sosialist","socialista"],["gitarist","guitarrista"],["idealist","idealista"],
-["modernist","modernista"],["florist","florista"],["optimist","optimista"],
-["pesimist","pesimista"],["pianist","pianista"],["turist","turista"],
-["realist","realista"],
-
-["kabel","cable"],["sammenlignbare","comparable"],
-["formidabel","formidable"],["presentabel","presentable"],["sannsynlig","probable"],
-["ansvarlig","responsable"],["variabel","variable"],["dårlig(horribel)","horrible"],
-["mulig","posible"],
-
-["problem","problema"],["system","sistema"],["poem","poema"],["tema","tema"],
-["teorem","teorema"],["skjema","esquema"],["emblem","emblema"],
-["dilemma","dilema"],["dogme","dogma"],["klima","clima"],
-["kino","cinema"],["aksiom","axioma"],["maskin","máquina"],
-["fenomen","fonómeno"],["blasfemi","blasfemia"],
-
-["skuespiller","actor"],["farge","color"],["direktør","director"],
-["doktor","doctor"],["feil","error"],["tjeneste","favor"],
-["ære","honor"],["skrekk","horror"],["humor","humor"],
-["motor","motor"],["pastor","pastor"],["professor","profesor"],
-["overlegen","superior"],["traktor","tractor"],["vanndamp","vapor"],
-["dyr","animal"],["årlig","anual"],["kunstig","artificial"],
-["brutal","brutal"],["kanal","canal"],["katedral","catedral"],
-["kolosal","colosal"],["kommersiell","comercial"],["kriminell","criminal"],
-["kulturell","cultural"],["esensiell","esencial"],["eksepsjonell","excepcional"],
-["eksperimentell","experimental"],["begravelse","funeral"],["sykehus","hospital"],
-["ideell","ideal"],["ulovlig","ilegal"],["internasjonal","internacional"],
-["irrasjonell","irracional"],["liberal","liberal"],["lokal","local"],
-["material","material"],["mental","mental"],["metall","metal"],
-["moral","moral"],["nasjonal","nacional"],["nøytral","neutral"],
-["normal","normal"],["original","original"],["radikal","radical"],
-["sentimental","sentimental"],["sosial","social"],["total","total"],
-["tradisjonell","tradicional"],["triviell","trivial"],["visuell","visual"],
-["jovial","jovial"],
-
-["ulykke","accidente"],["agent","agente"],["klient","cliente"],
-["eminent","eminente"],["ekvivalent","equivalente"],
-["intelligent","inteligente"],["pasient","paciente"],["permanent","permanente"],
-["president","presidente"],["beboer","residente"],["tilstrekkelig","suficiente"],
-["assistent","asistente"],["avhengig","dependiente"],["tilstedeværende","presente"],
-["overbevisende","convincente"],["brilliant","brillante"],
-["transparent","transparente"],["deprimerende","deprimente"],
-
-["deltager","participante"],["konstant","constante"],["dominerende","dominante"],
-["elefant","elefante"],["elegant","elegante"],["ignorant","ignorante"],
-["viktig","importante"],["intolerant","intolerante"],["restaurante","restaurante"],
-["signifikant","significante"],["interessant","interesante"],
-["arrogant","arrogante"],["tolerant","tolerante"],["relevant","relevante"]
-
+["fysisk","físico"],["historisk","histórico"],["praktisk","práctico"],
+["fantastisk","fantástico"],["magisk","mágico"],["politisk","político"],
+["typisk","típico"],["artist","artista"],["turist","turista"],
+["problem","problema"],["system","sistema"],["tema","tema"],
+["klima","clima"],["maskin","máquina"],["fenomen","fonómeno"],
+["farge","color"],["doktor","doctor"],["feil","error"],
+["humor","humor"],["motor","motor"],["dyr","animal"],
+["brutal","brutal"],["kanal","canal"],["nasjonal","nacional"],
+["normal","normal"],["original","original"],["total","total"],
+["ulykke","accidente"],["intelligent","inteligente"],
+["pasient","paciente"],["president","presidente"],
+["viktig","importante"],["relevant","relevante"]
 ];
 
 let L = [];
@@ -144,11 +133,28 @@ let feil = 0;
 let index = 0;
 
 const answerInput = document.getElementById("answer");
-answerInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        checkAnswer();
-    }
+
+answerInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") checkAnswer();
 });
+
+function startGame(antall) {
+    document.getElementById("levels").style.display = "none";
+    document.getElementById("done").innerText = "";
+    document.getElementById("restartBtn").style.display = "none";
+
+    riktig = 0;
+    feil = 0;
+
+    let shuffled = [...allWords].sort(() => Math.random() - 0.5);
+    L = shuffled.slice(0, antall);
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+
+    nextQuestion();
+}
 
 function nextQuestion() {
     if (L.length === 0) {
@@ -159,6 +165,7 @@ function nextQuestion() {
         document.getElementById("restartBtn").style.display = "block";
         return;
     }
+
     index = Math.floor(Math.random() * L.length);
     document.getElementById("question").innerText =
         'Hva betyr "' + L[index][1] + '"?';
@@ -169,6 +176,7 @@ function nextQuestion() {
 
 function checkAnswer() {
     if (L.length === 0) return;
+
     let svar = answerInput.value.trim();
     let fasit = L[index][0];
 
@@ -179,62 +187,31 @@ function checkAnswer() {
     } else {
         feil++;
         document.getElementById("feedback").innerText =
-            `"${L[index][1]}" betyr "${fasit}"\nPrøv igjen senere.`;
+            `"${L[index][1]}" betyr "${fasit}"`;
     }
 
-    let prosent = Math.round(100 * riktig / (riktig + feil) * 10) / 10;
+    let prosent = Math.round(100 * riktig / (riktig + feil));
     document.getElementById("stats").innerText =
-        `Feil: ${feil} | Riktig: ${riktig} | Poeng: ${prosent}% | Igjen: ${L.length}`;
+        `Riktig: ${riktig} | Feil: ${feil} | Poeng: ${prosent}% | Igjen: ${L.length}`;
 
     nextQuestion();
 }
-    
-
-function startGame(antall) {
-    // Skjul nivåvalg
-    document.getElementById("levels").style.display = "none";
-
-    // Nullstill spill
-    riktig = 0;
-    feil = 0;
-    index = 0;
-
-    // Bland ordlista og plukk riktig antall
-    let shuffled = [...allWords].sort(() => Math.random() - 0.5);
-    L = shuffled.slice(0, antall);
-
-    // Tøm visning
-    document.getElementById("feedback").innerText = "";
-    document.getElementById("stats").innerText = "";
-    document.getElementById("final").innerText = "";
-    document.getElementById("done").innerText = "";
-
-    nextQuestion();
-}
-
 
 function restartGame() {
-    // Vis nivåvalg igjen
     document.getElementById("levels").style.display = "block";
-
-    // Skjul spill-på-nytt-knappen
     document.getElementById("restartBtn").style.display = "none";
+    document.getElementById("done").innerText = "";
 
-    // Tøm tekst
-    document.getElementById("question").innerText = "Velg et nivå for å starte";
+    document.getElementById("question").innerText =
+        "Velg antall ord for å starte";
     document.getElementById("feedback").innerText = "";
     document.getElementById("stats").innerText = "";
     document.getElementById("final").innerText = "";
-    document.getElementById("done").innerText = "";
 
-    // Nullstill data
     L = [];
     riktig = 0;
     feil = 0;
 }
-
-
-
 </script>
 
 </body>
