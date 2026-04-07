@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¿Qué significa?</title>
+    
+    <style>
+            body {
+        font-family: Arial, sans-serif;
+        background: #6b0f1a; /* mørkerød */
+        margin: 0;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center; /* horisontalt */
+        align-items: center;     /* vertikalt */
+    }
+
+        
+    #box {
+        background: white;
+        padding: 20px;
+        max-width: 700px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+        input {padding: 8px; width: 100%; margin-top: 10px;}
+        button {margin-top: 10px; padding: 10px;}
+        #feedback {margin-top: 10px;font-weight: bold; white-space: pre-wrap;}
+        #done {margin-top: 40px; font-size: 36px;font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="box">
+    <a href="https://olemunthe.github.io/aprendeEspanol/">Volver a la página pricipial</a>
+    <h2>¿Qué significa en español?</h2>
+    <p>Escribe la palabra/la frase en español (sin mayúsculas)</p>
+    <p id="question">Laster spørsmål…</p>
+    <input type="text"  id="answer" placeholder="Tu respuesta">
+    <button onclick="checkAnswer()">Responder</button>
+
+    <p style="color: red;" id="feedback"></p>
+    <p id="stats"></p>
+    <p id="final"></p>
+</div>
+<p id="done"></p>
+
+<script>
+let allWords = [
+    ["jeg snakker med han/henne", "le hablo"],
+    ["vi snakker med han/henne", "le hablamos"],
+    ["du snakker med han/henne", "le hablas"],
+    ["dere snakker med han/henne", "le habláis"],
+    ["han/hun snakker med han/henne", "le habla"],
+    ["de snakker med han/henne", "le hablan"],
+
+    ["jeg spiser brød", "como pan"],
+    ["vi spiser pizza", "comemos pizza"],
+    ["du spiser eplet", "comes la manzana"],
+    ["dere spiser ris", "coméis arroz"],
+    ["han/hun spiser kylling", "come pollo"],
+    ["de spiser kaken", "comen el pastel"],
+
+    ["liker du meg?", "te gusto"],
+    ["liker du oss?", "te gustamos"],
+    ["jeg liker deg", "me gustas"],
+    ["jeg liker dere", "me gustáis"],
+    ["jeg liker det", "me gusta"],
+    ["jeg liker det (flertall)", "me gustan"],
+
+    ["jeg prøver å forstå", "intento entender"],
+
+    ["jeg håper på solskinn", "espero el sol"],
+    ["vi håper på bedre tider", "esperamos tiempos mejores"],
+    ["du håper på gode nyheter", "esperas buenas noticias"],
+    ["dere håper på sol", "esperáis el sol"],
+    ["han håper på en telefon", "espera una llamada"],
+    ["de håper på godt vær", "esperan buen tiempo"],
+
+    ["jeg åpner vinduet", "abro la ventana"],
+    ["vi åpner butikken", "abrimos la tienda"],
+    ["du åpner døra", "abres la puerta"],
+    ["dere åpner kofferten", "abrís la maleta"],
+    ["han/hun åpner boka", "abre el libro"],
+    ["de åpner gaven", "abren el regalo"],
+
+    ["jeg ser en film", "veo una película"],
+    ["vi ser en film", "vemos una película"],
+    ["du ser en film", "ves una película"],
+    ["dere ser en film", "veis una película"],
+    ["han/hun ser en film", "ve una película"],
+    ["de ser en film", "ven una película"]
+];
+
+// Bland ordlisten
+allWords.sort(() => Math.random() - 0.5);
+let L = allWords.slice(0, 50);
+let riktig = 0;
+let feil = 0;
+let index = 0;
+let venterFasit = false;
+
+const answerInput = document.getElementById("answer");
+answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkAnswer();
+    }
+});
+
+function nextQuestion() {
+    if (L.length === 0) {
+        let resultat = Math.round(100 * riktig / (riktig + feil));
+        document.getElementById("final").innerText =
+            "Tu puntuación final: " + resultat + "%";
+        document.getElementById("done").innerText = "Has terminado";
+        document.getElementById("question").innerText = "";
+        answerInput.style.display = "none";
+        return;
+    }
+    index = Math.floor(Math.random() * L.length);
+    document.getElementById("question").innerText =
+        '¿Qué significa? "' + L[index][0] + '"';
+    answerInput.value = "";
+    answerInput.focus();
+    venterFasit = false;
+}
+
+function checkAnswer() {
+    if (L.length === 0) return;
+    let svar = answerInput.value.trim();
+    let fasit = L[index][1];
+
+    if (!venterFasit) {
+        if (svar === fasit) {
+            riktig++;
+            document.getElementById("feedback").innerText = "¡Bueno!";
+            L.splice(index, 1); // fjern ordet fra listen
+            nextQuestion();
+        } else {
+            feil++;
+            document.getElementById("feedback").innerText =
+                `"${fasit}" significa "${L[index][0]}"\nPor favor, escribe la respuesta correcta para continuar.`;
+            answerInput.value = "";
+            venterFasit = true;
+        }
+    } else {
+        // Må skrive fasiten riktig
+        if (svar === fasit) {
+            document.getElementById("feedback").innerText =
+                `"¡Correcto! Ahora seguiremos con la siguiente palabra."`;
+            nextQuestion();
+        } else {
+            document.getElementById("feedback").innerText =
+                `Debes escribir la respuesta correcta exactamente:\n"${fasit}"`;
+            answerInput.value = "";
+        }
+    }
+
+    let prosent = Math.round(100 * riktig / (riktig + feil) * 10) / 10;
+    document.getElementById("stats").innerText =
+        `Errores: ${feil} | Correcto: ${riktig} | Puntuación: ${prosent}% | Restantes: ${L.length}`;
+}
+
+nextQuestion();
+</script>
+</body>
+</html>
