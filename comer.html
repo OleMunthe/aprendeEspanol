@@ -38,15 +38,31 @@ body {
     z-index: 1000;
 }
 
+
+    
 #box {
-    position: relative;
-    background: white;
-    padding: 20px;
-    max-width: 700px;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: relative; /* VIKTIG */
 }
+
+/* Felles stil for begge bilder */
+.side-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 120px;       /* juster størrelse */
+    height: auto;
+}
+
+/* Venstre side */
+.side-image.left {
+    left: -150px;       /* skyver bildet utenfor boksen */
+}
+
+/* Høyre side */
+.side-image.right {
+    right: -150px;
+}
+
 
 #levels {
     margin-bottom: 20px;
@@ -84,6 +100,10 @@ button {
 </header>
 
 <div id="box">
+    
+    <img src="comer1.png" class="side-image left" alt="">
+    <img src="comer2.png" class="side-image right" alt="">
+
     <a href="https://olemunthe.github.io/aprendeEspanol/">Volver a la página principal</a>
 
     <h2>¿Qué significa?</h2>
