@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Hva betyr det?</title>
+    
+    <style>
+        
+    body {
+        font-family: Arial, sans-serif;
+        background: #6b0f1a; /* mørkerød */
+        margin: 0;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center; /* horisontalt */
+        align-items: center;     /* vertikalt */
+    }
+
+        
+    #box {
+        background: white;
+        padding: 20px;
+        max-width: 700px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+        input {padding: 8px; width: 100%; margin-top: 10px;}
+        button {margin-top: 10px; padding: 10px;}
+        #feedback {margin-top: 10px;font-weight: bold;}
+        #done {margin-top: 40px; font-size: 36px;font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="box">
+    <a href="https://olemunthe.github.io/aprendeEspanol/">Gå tilbake til hovedsiden</a>
+    <h2>Hva betyr ordet på norsk?</h2>
+    <p>Skriv ordet på norsk og trykk Enter. Bare bruk små bokstaver.</p>
+    <p id="question">Laster spørsmål…</p>
+    <input type="text" id="answer" placeholder="Ditt svar">
+    <button onclick="checkAnswer()">Svar</button>
+
+    <p style="color: red;" id="feedback"></p>
+    <p id="stats"></p>
+    <p id="final"></p>
+</div>
+<p id="done"></p>
+
+<script>
+let allWords = [
+
+["klassisk","clásico"],["komisk","cómico"],["økonomisk","económico"],
+["fysisk","físico"],["hysterisk","histérico"],["identisk","idéntico"],
+["mekanisk","mecánico"],["politisk","político"],["teknisk","técnico"],
+["typisk","típico"],["tropisk","trópical"],["magisk","mágico"],
+["historisk","histórico"],["praktisk","práctico"],["fantastisk","fantástico"],
+["atletisk","atlético"],["etisk","ético"],["geografisk","geográfico"],
+["psykologisk","psicológico"],["romantisk","romántico"],["sarkastisk","sarcástico"],
+["akademisk","académico"],["pragmatisk","pragmático"],["teknologisk","tecnológico"],
+["teoretisk","teorético"],["patetisk","patético"],["allergisk","alérgico"],
+["problematisk","problemático"],["optimistisk","optimístico"],["realistisk","realístico"],
+["estetisk","estético"],["demokratisk","democrático"],["kaotisk","caótico"],
+["elektrisk","eléctrico"],["kritisk","crítico"],["analytisk","analítico"],
+["statistisk","estadístico"],["hermetisk","hermético"],["hypotetisk","hipotético"],
+["drastisk","drástico"],["automatisk","automático"],["fanatisk","fanático"],
+["ironisk","irónico"],["magnetisk","magnético"],
+
+["artist","artista"],["kapitalist","capitalista"],["kommunist","comunista"],
+["sosialist","socialista"],["gitarist","guitarrista"],["idealist","idealista"],
+["modernist","modernista"],["florist","florista"],["optimist","optimista"],
+["pesimist","pesimista"],["pianist","pianista"],["turist","turista"],
+["realist","realista"],
+
+["kabel","cable"],["sammenlignbare","comparable"],
+["formidabel","formidable"],["presentabel","presentable"],["sannsynlig","probable"],
+["ansvarlig","responsable"],["variabel","variable"],["dårlig(horribel)","horrible"],
+["mulig","posible"],
+
+["problem","problema"],["system","sistema"],["poem","poema"],["tema","tema"],
+["teorem","teorema"],["skjema","esquema"],["emblem","emblema"],
+["dilemma","dilema"],["dogme","dogma"],["klima","clima"],
+["kino","cinema"],["aksiom","axioma"],["maskin","máquina"],
+["fenomen","fonómeno"],["blasfemi","blasfemia"],
+
+["skuespiller","actor"],["farge","color"],["direktør","director"],
+["doktor","doctor"],["feil","error"],["tjeneste","favor"],
+["ære","honor"],["skrekk","horror"],["humor","humor"],
+["motor","motor"],["pastor","pastor"],["professor","profesor"],
+["overlegen","superior"],["traktor","tractor"],["vanndamp","vapor"],
+["dyr","animal"],["årlig","anual"],["kunstig","artificial"],
+["brutal","brutal"],["kanal","canal"],["katedral","catedral"],
+["kolosal","colosal"],["kommersiell","comercial"],["kriminell","criminal"],
+["kulturell","cultural"],["esensiell","esencial"],["eksepsjonell","excepcional"],
+["eksperimentell","experimental"],["begravelse","funeral"],["sykehus","hospital"],
+["ideell","ideal"],["ulovlig","ilegal"],["internasjonal","internacional"],
+["irrasjonell","irracional"],["liberal","liberal"],["lokal","local"],
+["material","material"],["mental","mental"],["metall","metal"],
+["moral","moral"],["nasjonal","nacional"],["nøytral","neutral"],
+["normal","normal"],["original","original"],["radikal","radical"],
+["sentimental","sentimental"],["sosial","social"],["total","total"],
+["tradisjonell","tradicional"],["triviell","trivial"],["visuell","visual"],
+["jovial","jovial"],
+
+["ulykke","accidente"],["agent","agente"],["klient","cliente"],
+["eminent","eminente"],["ekvivalent","equivalente"],
+["intelligent","inteligente"],["pasient","paciente"],["permanent","permanente"],
+["president","presidente"],["beboer","residente"],["tilstrekkelig","suficiente"],
+["assistent","asistente"],["avhengig","dependiente"],["tilstedeværende","presente"],
+["overbevisende","convincente"],["brilliant","brillante"],
+["transparent","transparente"],["deprimerende","deprimente"],
+
+["deltager","participante"],["konstant","constante"],["dominerende","dominante"],
+["elefant","elefante"],["elegant","elegante"],["ignorant","ignorante"],
+["viktig","importante"],["intolerant","intolerante"],["restaurante","restaurante"],
+["signifikant","significante"],["interessant","interesante"],
+["arrogant","arrogante"],["tolerant","tolerante"],["relevant","relevante"]
+
+];
+
+allWords.sort(() => Math.random() - 0.5);
+let L = allWords.slice(0, 50);
+let riktig = 0;
+let feil = 0;
+let index = 0;
+
+const answerInput = document.getElementById("answer");
+answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkAnswer();
+    }
+});
+
+function nextQuestion() {
+    if (L.length === 0) {
+        let resultat = Math.round(100 * riktig / (riktig + feil));
+        document.getElementById("final").innerText =
+            "Din poengsum: " + resultat + "%";
+        document.getElementById("done").innerText = "Ferdig!";
+        return;
+    }
+    index = Math.floor(Math.random() * L.length);
+    document.getElementById("question").innerText =
+        'Hva betyr "' + L[index][1] + '"?';
+
+    answerInput.value = "";
+    answerInput.focus();
+}
+
+function checkAnswer() {
+    if (L.length === 0) return;
+    let svar = answerInput.value.trim();
+    let fasit = L[index][0];
+
+    if (svar === fasit) {
+        riktig++;
+        document.getElementById("feedback").innerText = "Riktig!";
+        L.splice(index, 1);
+    } else {
+        feil++;
+        document.getElementById("feedback").innerText =
+            `"${L[index][1]}" betyr "${fasit}"\nPrøv igjen senere.`;
+    }
+
+    let prosent = Math.round(100 * riktig / (riktig + feil) * 10) / 10;
+    document.getElementById("stats").innerText =
+        `Feil: ${feil} | Riktig: ${riktig} | Poeng: ${prosent}% | Igjen: ${L.length}`;
+
+    nextQuestion();
+}
+
+nextQuestion();
+</script>
+
+</body>
+</html>
