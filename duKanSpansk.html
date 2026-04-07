@@ -5,6 +5,13 @@
     <title>Hva betyr det?</title>
     
     <style>
+            #levels {
+            margin-bottom: 20px;
+            }
+
+            #levels button {
+            margin-right: 10px;
+            }
         
     body {
         font-family: Arial, sans-serif;
@@ -37,6 +44,12 @@
 
 <div id="box">
     <a href="https://olemunthe.github.io/aprendeEspanol/">Gå tilbake til hovedsiden</a>
+        <div id="levels">
+        <p><strong>Velg nivå:</strong></p>
+        <button onclick="startGame(10)">10 ord</button>
+        <button onclick="startGame(20)">20 ord</button>
+        <button onclick="startGame(50)">50 ord</button>
+        </div>
     <h2>Hva betyr ordet på norsk?</h2>
     <p>Skriv ordet på norsk og trykk Enter. Bare bruk små bokstaver.</p>
     <p id="question">Laster spørsmål…</p>
@@ -120,8 +133,7 @@ let allWords = [
 
 ];
 
-allWords.sort(() => Math.random() - 0.5);
-let L = allWords.slice(0, 50);
+let L = [];
 let riktig = 0;
 let feil = 0;
 let index = 0;
@@ -170,8 +182,27 @@ function checkAnswer() {
 
     nextQuestion();
 }
+    
+function startGame(antall) {
+    // Nullstill spill
+    riktig = 0;
+    feil = 0;
+    index = 0;
 
-nextQuestion();
+    // Bland ordlista
+    let shuffled = [...allWords].sort(() => Math.random() - 0.5);
+    L = shuffled.slice(0, antall);
+
+    // Tøm visning
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+    document.getElementById("done").innerText = "";
+
+    nextQuestion();
+}
+
+
 </script>
 
 </body>
