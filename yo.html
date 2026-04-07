@@ -112,7 +112,13 @@ button {
     
     <p>Escribe la frase en español (sin mayúsculas)</p>
 
-    <p id="question"></strong></p>
+    <p id="question"><strong>Elige cuántas palabras</strong></p>
+
+    <div id="levels">
+        <button onclick="startGame(10)">10 palabras</button>
+        <button onclick="startGame(20)">20 palabras</button>
+        <button onclick="startGame(30)">30 palabras</button>
+    </div>
 
     <input type="text" id="answer" placeholder="Tu respuesta">
     <button onclick="checkAnswer()">Responder</button>
@@ -181,16 +187,15 @@ answerInput.addEventListener("keydown", e => {
     if (e.key === "Enter") checkAnswer();
 });
 
-
-function startGame() {
+function startGame(antall) {
+    document.getElementById("levels").style.display = "none";
     document.getElementById("restartBtn").style.display = "none";
     document.getElementById("done").innerText = "";
 
     riktig = 0;
     feil = 0;
 
-    // ✅ bruk ALLE ordene, bare stokket
-    L = [...allWords].sort(() => Math.random() - 0.5);
+    L = [...allWords].sort(() => Math.random() - 0.5).slice(0, antall);
 
     document.getElementById("feedback").innerText = "";
     document.getElementById("stats").innerText = "";
@@ -198,7 +203,6 @@ function startGame() {
 
     nextQuestion();
 }
-
 
 function nextQuestion() {
     if (L.length === 0) {
@@ -255,11 +259,13 @@ function checkAnswer() {
         `Aciertos: ${riktig} | Errores: ${feil} | Puntuación: ${prosent}% | Restantes: ${L.length}`;
 }
 
-
 function restartGame() {
+    document.getElementById("levels").style.display = "block";
     document.getElementById("restartBtn").style.display = "none";
     document.getElementById("done").innerText = "";
 
+    document.getElementById("question").innerText =
+        "Elige cuántas palabras";
     document.getElementById("feedback").innerText = "";
     document.getElementById("stats").innerText = "";
     document.getElementById("final").innerText = "";
@@ -267,12 +273,7 @@ function restartGame() {
     L = [];
     riktig = 0;
     feil = 0;
-
-    startGame(); 
 }
-
-
-startGame();
 </script>
 
 </body>
