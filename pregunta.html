@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>¿Qué significa?</title>
+
+<style>
+
+
+#layout {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Bildene på hver side */
+.side-image {
+    width: 180px;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+  
+body {
+    font-family: Arial, sans-serif;
+    background: white; /* ← endret */
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Ferdig-tekst */
+#done {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/* Restart-knapp */
+#restartBtn {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    font-size: 18px;
+    display: none;
+    z-index: 1000;
+}
+
+#box {
+    position: relative;
+    background: white;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#levels {
+    margin-bottom: 20px;
+}
+
+#levels button {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+input {
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1 id="done"></h1>
+    <button id="restartBtn" onclick="restartGame()">Jugar de nuevo</button>
+</header>
+
+
+<div id="layout">
+    <img src="pregunta.jpg" alt="Imagen izquierda" class="side-image">
+
+    <div id="box">
+
+    <a href="https://olemunthe.github.io/aprendeEspanol/">Volver a la página principal</a>
+
+    <h2>¿Qué significa?</h2>
+    
+    <p>Escribe la frase en español (sin mayúsculas)</p>
+
+    <p id="question"></strong></p>
+
+    <input type="text" id="answer" placeholder="Tu respuesta">
+    <button onclick="checkAnswer()">Responder</button>
+
+    <p id="feedback" style="color:red;"></p>
+    <p id="stats"></p>
+    <p id="final"></p>
+
+    
+</div>
+</div>
+
+
+<script>
+let allWords = [
+["Vil du (ha)?",				"quieres"],
+["Hva skjer?", 				"qué pasa"],
+["Hva heter (kalles) du?",			"cómo te llamas"],
+["Hva heter (kalles) De",			"cómo se llama"],
+["Er det langt?", 				"está lejos"],
+["Hvordan har du det?", 			"cómo estás"],
+["Hvor mye koster det?", 			"cuánto cuesta"],
+["Hvordan sier man - på spansk?", 	"cómo se dice - en español"],
+["Hvordan kan jeg hjelpe deg?", 		"cómo puedo ayudarte"],
+["Kan du hjelpe meg?", 			"puedes ayudarme"],
+["Kan du gjenta det?", 			"puedes repetirlo"],
+["Kan vi komme inn?", 			"podemos entrar"],
+["Gjør det vondt?", 			"te duele"],
+["Hva betyr det?", 			"qué lo significa"],
+["Hva er det?", 				"qué es eso"],
+["Hvilken tid er det?", 			"qué hora es"],
+["Hva vil du gjøre?", 			"qué quieres hacer"],
+["Hvorfor ikke?", 				"por qué no"],
+["Er det en butikk i nærheten?",		"hay una tienda cerca de aquí"]
+
+
+];
+
+let L = [];
+let riktig = 0;
+let feil = 0;
+let index = 0;
+let venterFasit = false;
+
+const answerInput = document.getElementById("answer");
+
+answerInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") checkAnswer();
+});
+
+
+function startGame() {
+    document.getElementById("restartBtn").style.display = "none";
+    document.getElementById("done").innerText = "";
+
+    riktig = 0;
+    feil = 0;
+
+   L = [...allWords].sort(() => Math.random() - 0.5);
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+
+    nextQuestion();
+}
+
+
+function nextQuestion() {
+    if (L.length === 0) {
+        let score = Math.round(100 * riktig / (riktig + feil));
+        document.getElementById("final").innerText =
+            "Puntuación final: " + score + "%";
+        document.getElementById("done").innerText = "¡Terminado!";
+        document.getElementById("restartBtn").style.display = "block";
+        return;
+    }
+
+    index = Math.floor(Math.random() * L.length);
+    document.getElementById("question").innerText =
+        '¿Qué significa "' + L[index][0] + '"?';
+
+    answerInput.value = "";
+    answerInput.focus();
+    venterFasit = false;
+}
+
+function checkAnswer() {
+    if (L.length === 0) return;
+
+    const svar = answerInput.value.trim();
+    const fasit = L[index][1];
+
+    if (!venterFasit) {
+        if (svar === fasit) {
+            riktig++;
+            document.getElementById("feedback").innerText = "¡Correcto!";
+            L.splice(index, 1);
+            nextQuestion();
+        } else {
+            feil++;
+            document.getElementById("feedback").innerText =
+                `"${fasit}" significa "${L[index][0]}".\nEscribe la respuesta correcta para continuar.`;
+            answerInput.value = "";
+            venterFasit = true;
+        }
+    } else {
+        if (svar === fasit) {
+            document.getElementById("feedback").innerText =
+                "¡Bien! Seguimos con la siguiente palabra.";
+            nextQuestion();
+        } else {
+            document.getElementById("feedback").innerText =
+                `Debes escribir exactamente: "${fasit}"`;
+            answerInput.value = "";
+        }
+    }
+
+    let prosent = Math.round(100 * riktig / (riktig + feil));
+    document.getElementById("stats").innerText =
+        `Aciertos: ${riktig} | Errores: ${feil} | Puntuación: ${prosent}% | Restantes: ${L.length}`;
+}
+
+
+function restartGame() {
+    document.getElementById("restartBtn").style.display = "none";
+    document.getElementById("done").innerText = "";
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+
+    L = [];
+    riktig = 0;
+    feil = 0;
+
+    startGame(); 
+}
+
+
+startGame();
+</script>
+
+</body>
+</html>
