@@ -6,31 +6,41 @@
     <title>Aprender Español</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        header {
-            background: #007BFF;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-        main {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 600px;
-            margin: 20px auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        footer {
-            text-align: center;
-            font-size: 0.9em;
-            color: #555;
-            margin-top: 20px;
-        }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    /* Bakgrunnsbilde */
+    background-image: url('bakgrunn.jpg'); /* <-- legg inn din bildefil */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Header mørkerød */
+header {
+    background: #8B0000; /* mørkerød */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Main med halvgjennomsiktig hvit */
+main {
+    background: rgba(255, 255, 255, 0.85); /* <-- transparens */
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 40px auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 20px;
+}
     </style>
 </head>
 <body>
