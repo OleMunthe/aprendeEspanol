@@ -183,13 +183,17 @@ function checkAnswer() {
     nextQuestion();
 }
     
+
 function startGame(antall) {
+    // Skjul nivåvalg
+    document.getElementById("levels").style.display = "none";
+
     // Nullstill spill
     riktig = 0;
     feil = 0;
     index = 0;
 
-    // Bland ordlista
+    // Bland ordlista og plukk riktig antall
     let shuffled = [...allWords].sort(() => Math.random() - 0.5);
     L = shuffled.slice(0, antall);
 
@@ -201,6 +205,7 @@ function startGame(antall) {
 
     nextQuestion();
 }
+
 
 
 </script>
