@@ -4,64 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprender Español</title>
+
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-    
-    background-image: url('SpanskeMeg.jpg'); 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
+        /* Header */
+        header {
+            background: #8B0000;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
 
+        /* Hero-seksjon (bakgrunnsbilde) */
+        .hero {
+            background-image: url('bakgrunn.jpg'); /* <-- BYTT til ditt bilde */
+            background-size: cover;
+            background-position: center;
+            padding: 60px 20px;
+        }
 
-header {
-    background: #8B0000; 
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
+        /* Main (oppå bildet) */
+        main {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
 
+        footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            margin: 20px;
+        }
 
-main {
-    background: rgba(255, 255, 255, 0.85); 
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 40px auto;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-}
-
-footer {
-    text-align: center;
-    font-size: 0.9em;
-    color: #555;
-    margin-top: 20px;
-}
+        a {
+            color: #8B0000;
+        }
     </style>
 </head>
+
 <body>
 
     <header>
         <h1>Una página web para aprender español</h1>
     </header>
 
-    <main>
-        <h2>¡Bienvenido!</h2>
-        <p>Aquí tienes algunas sitios para aprender español.</p>
-        <p>Las escribí para noruegos que, como yo, quieren aprender español.</p>
+    <div class="hero">
+        <main>
+            <h2>¡Bienvenido!</h2>
+            <p>Aquí tienes algunas sitios para aprender español.</p>
+            <p>Las escribí para noruegos que, como yo, quieren aprender español.</p>
 
-        <h3>Sitios para aprender español:</h3>
-        <ul>
-            <li><a href="https://olemunthe.github.io/DuKanSpansk/">Du kan spanske ord</a></li>
-            <li><a href="https://olemunthe.github.io/SabesPalabras/">Sabes palabras españoles</a></li>
-            <li><a href="https://olemunthe.github.io/Verbos/">Verbos</a></li>
-            <li><a href="https://olemunthe.github.io/spanskeVerb/">Frases con verbos</a></li>
-        </ul>
+            <h3>Sitios para aprender español:</h3>
+            <ul>
+                <li><a href="https://olemunthe.github.io/DuKanSpansk/">Du kan spanske ord</a></li>
+                <li><a href="https://olemunthe.github.io/SabesPalabras/">Sabes palabras españoles</a></li>
+                <li><a href="https://olemunthe.github.io/Verbos/">Verbos</a></li>
+                <li><a href="https://olemunthe.github.io/spanskeVerb/">Frases con verbos</a></li>
+            </ul>
+        </main>
+    </div>
 
+</body>
+</html>
     </main>
 
 
