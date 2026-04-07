@@ -1,362 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>¿Qué significa?</title>
-    
-    <style>
-            body {
-        font-family: Arial, sans-serif;
-        background: #6b0f1a; /* mørkerød */
-        margin: 0;
-        min-height: 100vh;
+<meta charset="UTF-8">
+<title>¿Qué significa?</title>
 
-        display: flex;
-        justify-content: center; /* horisontalt */
-        align-items: center;     /* vertikalt */
-    }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #6b0f1a;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        
-    #box {
-        background: white;
-        padding: 20px;
-        max-width: 700px;
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-        input {padding: 8px; width: 100%; margin-top: 10px;}
-        button {margin-top: 10px; padding: 10px;}
-        #feedback {margin-top: 10px;font-weight: bold; white-space: pre-wrap;}
-        #done {margin-top: 40px; font-size: 36px;font-weight: bold; text-align: center; }
-    </style>
+/* Ferdig-tekst */
+#done {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/* Restart-knapp */
+#restartBtn {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    font-size: 18px;
+    display: none;
+    z-index: 1000;
+}
+
+#box {
+    position: relative;
+    background: white;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#levels {
+    margin-bottom: 20px;
+}
+
+#levels button {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+input {
+    padding: 8px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    white-space: pre-wrap;
+}
+</style>
 </head>
+
 <body>
 
+<header>
+    <h1 id="done"></h1>
+    <button id="restartBtn" onclick="restartGame()">Jugar de nuevo</button>
+</header>
+
 <div id="box">
-    <a href="https://olemunthe.github.io/aprendeEspanol/">Volver a la página pricipial</a>
+    <a href="https://olemunthe.github.io/aprendeEspanol/">Volver a la página principal</a>
+
     <h2>¿Qué significa en español?</h2>
-    <p>Escribe la palabra/la frase en español (sin mayúsculas)</p>
-    <p id="question">Laster spørsmål…</p>
-    <input type="text"  id="answer" placeholder="Tu respuesta">
+    <p>Escribe la palabra en español (sin mayúsculas) y pulsa Enter</p>
+
+    <p id="question"><strong>Elige cuántas palabras</strong></p>
+
+    <div id="levels">
+        <button onclick="startGame(10)">10 palabras</button>
+        <button onclick="startGame(20)">20 palabras</button>
+        <button onclick="startGame(30)">30 palabras</button>
+    </div>
+
+    <input type="text" id="answer" placeholder="Tu respuesta">
     <button onclick="checkAnswer()">Responder</button>
 
-    <p style="color: red;" id="feedback"></p>
+    <p id="feedback" style="color:red;"></p>
     <p id="stats"></p>
     <p id="final"></p>
 </div>
-<p id="done"></p>
 
 <script>
-
 let allWords = [
-
-    
-["klassisk", 	"clásico"],
-["komisk", 	"cómico"],
-["økonomisk", 	"económico"],
-["fysisk", 	"físico"],
-["hysterisk", 	"histérico"],
-["identisk", 	"idéntico"],
-["mekanisk", 	"mecánico"],
-["politisk", 	"político"],
-["teknisk", 	"técnico"],
-["typisk", 	"típico"],
-["tropisk", 	"tropical"],
-["magisk", 	"mágico"],
-["historisk", 	"histórico"],
-["praktisk", 	"práctico"],
-["fantastisk", 	"fantástico"],
-["atletisk", 	"atlético"],
-["etisk", 		"ético"],
-["geografisk", 	"geográfico"],
-["psykologisk", 	"psicológico"],
-["romantisk", 	"romántico"],
-["sarkastisk", 	"sarcástico"],
-["akademisk", 	"académico"],
-["pragmatisk", 	"pragmático"],
-["teknologisk", 	"tecnológico"],
-["teoretisk", 	"teorético"],
-["patetisk", 	"patético"],
-["allergisk", 	"alérgico"],
-["problematisk",	"problemático"],
-["optimistisk", 	"optimista"],
-["realist", 	"realista"],
-["estetisk", 	"estético"],
-["demokratisk", 	"democrático"],
-["kaotisk", 	"caótico"],
-["elektrisk", 	"eléctrico"],
-["kritisk", 	"crítico"],
-["analytisk", 	"analítico"],
-["statistisk", 	"estadístico"],
-["hermetisk", 	"hermético"],
-["hypotetisk", 	"hipotético"],
-["drastisk", 	"drástico"],
-["automatisk", 	"automático"],
-["fanatisk", 	"fanático"],
-["ironisk", 	"irónico"],
-["magnetisk", 	"magnético"],
-
-["artist", 	"artista"],
-["kapitalist", 	"capitalista"],
-["kommunist", 	"comunista"],
-["sosialist", 	"socialista"],
-["gitarist", 	"guitarrista"],
-["idealist", 	"idealista"],
-["modernist", 	"modernista"],
-["florist", 	"florista"],
-["optimist", 	"optimista"],
-["pesimist", 	"pesimista"],
-["pianist", 	"pianista"],
-["turist", 	"turista"],
-["realistisk", 	"realista"],
-
-["kabel", 		"cable"],
-["sammenlignbare", 	"comparable"],
-["formidabel", 		"formidable"],
-["presentabel", 		"presentable"],
-["sannsynlig", 		"probable"],
-["ansvarlig", 		"responsable"],
-["variabel", 		"variable"],
-["dårlig(horribel)", 	"horrible"],
-["mulig", 		"posible"],
-
-["problem", 	"problema"],
-["system", 	"sistema"],
-["poem", 	"poema"],
-["tema", 	"tema"],
-["teorem", 	"teorema"],
-["skjema", 	"esquema"],
-["emblem", 	"emblema"],
-["dilemma", 	"dilema"],
-["dogme", 	"dogma"],
-["klima", 	"clima"],
-["kino", 		"cinema"],
-["aksiom", 	"axioma"],
-["maskin", 	"máquina"],
-["fenomen", 	"fonómeno"],
-["blasfemi", 	"blasfemia"],
-
-["skuespiller", 	"actor"],
-["farge",		"color"],
-["direktør", 	"director"],
-["doktor", 	"doctor"],
-["feil", 		"error"],
-["tjeneste", 	"servicio"],
-["ære", 		"honor"],
-["skrekk", 	"horror"],
-["humor", 	"humor"],
-["motor", 	"motor"],
-["pastor", 	"pastor"],
-["professor", 	"profesor"],
-["overlegen", 	"superior"],
-["traktor", 	"tractor"],
-["vanndamp", 	"vapor"],
-["dyr", 			"animal"],
-["årlig", 			"anual"],
-["kunstig", 		"artificial"],
-["brutal", 		"brutal"],
-["kanal", 		"canal"],
-["katedral", 		"catedral"],
-["kolosal(stor)", 		"colosal"],
-["komersiell", 		"comercial"],
-["kriminell", 		"criminal"],
-["kulturell", 		"cultural"],
-["esensiell", 		"esencial"],
-["ekspesjonell", 		"excepcional"],
-["eksperimentell", 	"experimental"],
-["begravelse", 		"funeral"],
-["sykehus", 		"hospital"],
-["ideell", 		"ideal"],
-["ulovelig", 		"ilegal"],
-["internasjonal", 		"internacional"],
-["irrasjonell", 		"irracional"],
-["liberal", 		"liberal"],
-["lokal", 			"local"],
-["material", 		"material"],
-["mental", 		"mental"],
-["metall", 		"metal"],
-["moral", 		"moral"],
-["nasjonal", 		"nacional"],
-["nøytral", 		"neutral"],
-["normal", 		"normal"],
-["orginal", 		"original"],
-["radikal", 		"radical"],
-["sentimental", 		"sentimental"],
-["sosial", 		"social"],
-["total", 			"total"],
-["tradisjonelll", 		"tradicional"],
-["triviell", 		"trivial"],
-["visuell", 		"visual"],
-["jovial", 		"jovial"],
-
-["ulykke", 		"accidente"],
-["agent", 		"agente"],
-["klient", 		"cliente"],
-["eminent", 		"eminente"],
-["ekvivalent", 		"equivalente"],
-["bevis", 		"prueba"],
-["intelligent", 		"inteligente"],
-["pasient", 		"paciente"],
-["permanent", 		"permanente"],
-["president", 		"presidente"],
-["beboer", 		"residente"],
-["tilstrekkelig", 		"suficiente"],
-["assistent", 		"asistente"],
-["avhengig", 		"dependiente"],
-["tilstedeværende", 	"presente"],
-["overbevisende", 	"convincente"],
-["brilliant", 		"brillante"],
-["transparent",	 	"transparente"],
-["transparent", 		"transparente"],
-["deprimerende", 		"deprimente"],
-
-["deltager", 	"participante"],
-["konstant", 	"constante"],
-["dominerende", "dominante"],
-["elefant", 	"elefante"],
-["elegant", 	"elegante"],
-["ignorant",	 "ignorante"],
-["viktig", 	"importante"],
-["intolerant", 	"intolerante"],
-["restaurant", 	"restaurante"],
-["signifikant", 	"significante"],
-["interessant", 	"interesante"],
-["arrogant", 	"arrogante"],
-["tolerant", 	"tolerante"],
-["relevant", 	"relevante"],
-
-["informasjon", 		"información"],
-["konstruksjon", 		"construcción"],
-["operasjon", 		"operación"],
-["invitasjon", 		"invitación"],
-["institusjon", 		"institución"],
-["komposisjon", 		"composición"],
-["produksjon", 		"producción"],
-["reaksjon", 		"reacción"],
-["konklusjon", 		"conclusión"],
-["diskusjon", 		"discusión"],
-["aksjon", 		"acción"],
-["adopsjon", 		"adopción"],
-["ambisjon", 		"ambición"],
-["sivilisasjon", 		"civilización"],
-["klassifikasjon", 	"clasificación"],
-["kompensasjon", 	"compensación"],
-["kreasjon", 		"creación"],
-["ekspansjon", 		"expansión"],
-["eksplosjon", 		"explosión"],
-["formasjon", 		"formación"],
-["generasjon", 		"generación"],
-["ilustrasjon", 		"ilustración"],
-["implikasjon", 		"implicación"],
-["observasjon", 		"observación"],
-["okupasjon", 		"ocupación"],
-["perfeksjon", 		"perfección"],
-["posisjon", 		"posición"],
-["presisjon", 		"precisión"],
-["reservasjon", 		"reservación"],
-["rotasjon", 		"rotación"],
-["situasjon", 		"situación"],
-["transformasjon", 	"transformación"],
-["variasjon", 		"variación"],
-["vegetasjon", 		"vegetación"],
-["ventilasjon", 		"ventilación"],
-["versjon", 		"versión"],
-["visjon", 		"visión"],
-
-["akseptere", 		"aceptar"],
-["adoptere", 		"adoptar"],
-["annullere", 		"anular"],
-["arrestere", 		"arrestar"],
-["assistere", 		"asistir"],
-["deklarere", 		"declarar"],
-["demonstrere", 		"demostrar"],
-["designere", 		"diseñar"],
-["diktere", 		"dictar"],
-["diskutere", 		"discutir"],
-["distansere", 		"distanciar"],
-["distribuere", 		"distribuir"],
-["dokumentere", 	"documentar"],
-["dominere", 		"dominar"],
-["duplisere", 		"duplicar"],
-["eksaminere", 		"examinar"],
-["eksistere", 		"existir"],
-["ekskludere", 		"excluir"],
-["eksponere", 		"exponer"],
-["ekstrahere", 		"extraer"],
-["eliminere", 		"eliminar"],
-["emigrere", 		"emigrar"],
-["erklære", 		"declarar"],
-["evaluere", 		"evaluar"],
-["eksperimentere", 	"experimentar"],
-["frustrere", 		"frustrar"],
-["generere", 		"generar"],
-["illustrere", 		"ilustrar"],
-["imponere", 		"impresionar"],
-["informere", 		"informar"],
-["inspisere", 		"inspeccionar"],
-["inspirere", 		"inspirar"],
-["integrere", 		"integrar"],
-["investere", 		"invertir"],
-["kalkulere", 		"calcular"],
-["kommandere", 		"comandar"],
-["konfirmere", 		"confirmar"],
-["konkludere", 		"concluir"],
-["konkurrere", 		"competir"],
-["konsentrere", 		"concentrar"],
-["kontrollere", 		"controlar"],
-["koordinere", 		"coordinar"],
-["kopiere", 		"copiar"],
-["korrigere", 		"corregir"],
-["kvalifisere", 		"calificar"],
-["manipulere", 		"manipular"],
-["motivere", 		"motivar"],
-["navigere", 		"navegar"],
-["organisere", 		"organizar"],
-["parodiere", 		"parodiar"],
-["passere", 		"pasar"],
-["patentere", 		"patentar"],
-["polere", 		"pulir"],
-["predikere", 		"predicar"],
-["presentere", 		"presentar"],
-["produsere", 		"producir"],
-["provosere", 		"provocar"],
-["reflektere", 		"reflexionar"],
-["reorganisere", 		"reorganizar"],
-["respektere", 		"respetar"],
-
-
-
+    ["klassisk","clásico"],["komisk","cómico"],["økonomisk","económico"],
+    ["fysisk","físico"],["historisk","histórico"],["praktisk","práctico"],
+    ["fantastisk","fantástico"],["magisk","mágico"],["politisk","político"],
+    ["typisk","típico"],["artist","artista"],["turist","turista"],
+    ["problem","problema"],["system","sistema"],["tema","tema"],
+    ["klima","clima"],["maskin","máquina"],["fenomen","fenómeno"],
+    ["farge","color"],["doktor","doctor"],["feil","error"],
+    ["humor","humor"],["motor","motor"],["dyr","animal"],
+    ["brutal","brutal"],["kanal","canal"],["nasjonal","nacional"],
+    ["normal","normal"],["original","original"],["total","total"],
+    ["ulykke","accidente"],["intelligent","inteligente"],
+    ["pasient","paciente"],["president","presidente"],
+    ["viktig","importante"],["relevant","relevante"]
 ];
 
-// Bland ordlisten
-allWords.sort(() => Math.random() - 0.5);
-let L = allWords.slice(0, 50);
+let L = [];
 let riktig = 0;
 let feil = 0;
 let index = 0;
 let venterFasit = false;
 
 const answerInput = document.getElementById("answer");
-answerInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        checkAnswer();
-    }
+
+answerInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") checkAnswer();
 });
+
+function startGame(antall) {
+    document.getElementById("levels").style.display = "none";
+    document.getElementById("restartBtn").style.display = "none";
+    document.getElementById("done").innerText = "";
+
+    riktig = 0;
+    feil = 0;
+
+    L = [...allWords].sort(() => Math.random() - 0.5).slice(0, antall);
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+
+    nextQuestion();
+}
 
 function nextQuestion() {
     if (L.length === 0) {
-        let resultat = Math.round(100 * riktig / (riktig + feil));
+        let score = Math.round(100 * riktig / (riktig + feil));
         document.getElementById("final").innerText =
-            "Tu puntuación final: " + resultat + "%";
-        document.getElementById("done").innerText = "Has terminado";
-        document.getElementById("question").innerText = "";
-        answerInput.style.display = "none";
+            "Puntuación final: " + score + "%";
+        document.getElementById("done").innerText = "¡Terminado!";
+        document.getElementById("restartBtn").style.display = "block";
         return;
     }
+
     index = Math.floor(Math.random() * L.length);
     document.getElementById("question").innerText =
-        '¿Qué significa? "' + L[index][0] + '"';
+        '¿Qué significa "' + L[index][0] + '"?';
+
     answerInput.value = "";
     answerInput.focus();
     venterFasit = false;
@@ -364,41 +172,56 @@ function nextQuestion() {
 
 function checkAnswer() {
     if (L.length === 0) return;
-    let svar = answerInput.value.trim();
-    let fasit = L[index][1];
+
+    const svar = answerInput.value.trim();
+    const fasit = L[index][1];
 
     if (!venterFasit) {
         if (svar === fasit) {
             riktig++;
-            document.getElementById("feedback").innerText = "¡Bueno!";
-            L.splice(index, 1); // fjern ordet fra listen
+            document.getElementById("feedback").innerText = "¡Correcto!";
+            L.splice(index, 1);
             nextQuestion();
         } else {
             feil++;
             document.getElementById("feedback").innerText =
-                `"${fasit}" significa "${L[index][0]}"\nPor favor, escribe la respuesta correcta para continuar.`;
+                `"${fasit}" significa "${L[index][0]}".\nEscribe la respuesta correcta para continuar.`;
             answerInput.value = "";
             venterFasit = true;
         }
     } else {
-        // Må skrive fasiten riktig
         if (svar === fasit) {
             document.getElementById("feedback").innerText =
-                `"¡Correcto! Ahora seguiremos con la siguiente palabra."`;
+                "¡Bien! Seguimos con la siguiente palabra.";
             nextQuestion();
         } else {
             document.getElementById("feedback").innerText =
-                `Debes escribir la respuesta correcta exactamente:\n"${fasit}"`;
+                `Debes escribir exactamente: "${fasit}"`;
             answerInput.value = "";
         }
     }
 
-    let prosent = Math.round(100 * riktig / (riktig + feil) * 10) / 10;
+    let prosent = Math.round(100 * riktig / (riktig + feil));
     document.getElementById("stats").innerText =
-        `Errores: ${feil} | Correcto: ${riktig} | Puntuación: ${prosent}% | Restantes: ${L.length}`;
+        `Aciertos: ${riktig} | Errores: ${feil} | Puntuación: ${prosent}% | Restantes: ${L.length}`;
 }
 
-nextQuestion();
+function restartGame() {
+    document.getElementById("levels").style.display = "block";
+    document.getElementById("restartBtn").style.display = "none";
+    document.getElementById("done").innerText = "";
+
+    document.getElementById("question").innerText =
+        "Elige cuántas palabras";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+
+    L = [];
+    riktig = 0;
+    feil = 0;
+}
 </script>
+
 </body>
 </html>
