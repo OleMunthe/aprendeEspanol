@@ -32,19 +32,21 @@
         width: 100%;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        <button id="restartBtn" onclick="restartGame()" style="display:none;">
-            Spill på nytt
-        </button>
+        
     }
 
         input {padding: 8px; width: 100%; margin-top: 10px;}
         button {margin-top: 10px; padding: 10px;}
         #feedback {margin-top: 10px;font-weight: bold;}
         #done {margin-top: 40px; font-size: 36px;font-weight: bold; text-align: center; }
+        
     </style>
 </head>
 <body>
-
+<p id="done"></p>
+    <button id="restartBtn" onclick="restartGame()" style="display:none;">
+            Spill på nytt
+        </button>
 <div id="box">
     <a href="https://olemunthe.github.io/aprendeEspanol/">Gå tilbake til hovedsiden</a>
         <div id="levels">
@@ -63,7 +65,7 @@
     <p id="stats"></p>
     <p id="final"></p>
 </div>
-<p id="done"></p>
+
 
 <script>
 let allWords = [
