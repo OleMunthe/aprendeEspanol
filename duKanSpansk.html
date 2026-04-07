@@ -32,6 +32,9 @@
         width: 100%;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        <button id="restartBtn" onclick="restartGame()" style="display:none;">
+            Spill på nytt
+        </button>
     }
 
         input {padding: 8px; width: 100%; margin-top: 10px;}
@@ -151,6 +154,7 @@ function nextQuestion() {
         document.getElementById("final").innerText =
             "Din poengsum: " + resultat + "%";
         document.getElementById("done").innerText = "Ferdig!";
+        document.getElementById("restartBtn").style.display = "block";
         return;
     }
     index = Math.floor(Math.random() * L.length);
@@ -204,6 +208,27 @@ function startGame(antall) {
     document.getElementById("done").innerText = "";
 
     nextQuestion();
+}
+
+
+function restartGame() {
+    // Vis nivåvalg igjen
+    document.getElementById("levels").style.display = "block";
+
+    // Skjul spill-på-nytt-knappen
+    document.getElementById("restartBtn").style.display = "none";
+
+    // Tøm tekst
+    document.getElementById("question").innerText = "Velg et nivå for å starte";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("stats").innerText = "";
+    document.getElementById("final").innerText = "";
+    document.getElementById("done").innerText = "";
+
+    // Nullstill data
+    L = [];
+    riktig = 0;
+    feil = 0;
 }
 
 
