@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>¿Qué significa?</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#box {
+    position: relative;       /* NY – nødvendig for bildene */
+    z-index: 1;               /* NY */
+    background: white;
+    padding: 24px;
+    max-width: 560px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+#box::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -220px;
+    width: 200px;
+    height: 500px;
+    background: url("comer1.jpg") no-repeat center;
+    background-size: contain;
+    transform: translateY(-50%);
+    z-index: -1;
+}
+
+#box::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -220px;
+    width: 200px;
+    height: 300px;
+    background: url("comer2.jpg") no-repeat center;
+    background-size: contain;
+    transform: translateY(-50%);
+    z-index: -1;
+}
+
+#levels button {
+    margin-right: 10px;
+    padding: 10px 14px;
+    font-size: 15px;
+}
+
+/* Svaralternativer */
+.option {
+    display: block;
+    margin-top: 10px;
+    padding: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #fafafa;
+    transition: background 0.2s, border 0.2s;
+}
+
+.option:hover {
+    background: #f0f0f0;
+}
+
+.option.correct {
+    background: #d4f8d4;
+    border-color: #2ecc71;
+}
+
+.option.wrong {
+    background: #f8d4d4;
+    border-color: #e74c3c;
+}
+
+#nextBtn {
+    margin-top: 18px;
+    padding: 10px 18px;
+    font-size: 16px;
+    display: none;
+}
+
+/* Progressbar */
+#progress {
+    height: 16px;
+    background: #e0e0e0;
+    border-radius: 8px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: #676968;
+    transition: width 0.3s;
+}
+
+#feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<a href="https://olemunthe.github.io/aprendeEspanol/">
+    Volver a la página principal
+</a>
+
+<!-- ALLTID SYNLIG -->
+<div id="progress">
+    <div id="progressBar"></div>
+</div>
+
+<p id="stats"></p>
+<p id="feedback"></p>
+<p id="final"></p>
+
+<h2 id="title">¿Qué significa?</h2>
+
+<p id="question"><strong>Elige cuántas palabras</strong></p>
+
+<div id="levels">
+    <button onclick="startGame(10)">10 palabras</button>
+    <button onclick="startGame(20)">20 palabras</button>
+</div>
+
+<div id="options"></div>
+
+<button id="nextBtn" onclick="nextQuestion()">Neste spørsmål</button>
+
+</div>
+
+<script>
+let allWords = [
+    ["jeg spiser brød","como pan"],
+    ["vi spiser pizza","comemos pizza"],
+    ["du spiser eplet","comes la manzana"],
+    ["dere spiser ris","coméis arroz"],
+    ["han/hun spiser kylling","come pollo"],
+    ["de spiser kaken","comen el pastel"],
+
+    ["jeg spiste pizza","comí pizza"],
+    ["vi spiste pizza","comimos pizza"],
+    ["du spiste eplet","comiste la manzana"],
+    ["dere spiste ris","comisteis arroz"],
+    ["han spiste kylling","comió pollo"],
+    ["de spiste kaken","comieron el pastel"]
+];
+
+let L = [];
+let total = 0;
+let riktig = 0;
+let feil = 0;
+let index = 0;
+
+function startGame(n) {
+    document.getElementById("levels").style.display = "none";
+
+    riktig = 0;
+    feil = 0;
+
+    L = [...allWords]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, n);
+
+    total = L.length;
+
+    updateProgress();
+    updateStats();
+
+    nextQuestion();
+}
+
+function nextQuestion() {
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("feedback").innerText = "";
+
+    if (L.length === 0) {
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("question").style.display = "none";
+    document.getElementById("title").style.display = "none";
+    document.getElementById("nextBtn").style.display = "none";
+
+    document.getElementById("final").innerText =
+        "Puntuación final: " +
+        Math.round(100 * riktig / (riktig + feil)) + "%";
+    return;
+}
+
+    index = Math.floor(Math.random() * L.length);
+    document.getElementById("question").innerText =
+        `¿Qué significa "${L[index][0]}"?`;
+
+    showOptions();
+}
+
+function showOptions() {
+    const options = document.getElementById("options");
+    options.innerHTML = "";
+
+    const correct = L[index][1];
+
+    let wrong = allWords
+        .map(w => w[1])
+        .filter(w => w !== correct)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+    [correct, ...wrong]
+        .sort(() => Math.random() - 0.5)
+        .forEach(text => {
+            let div = document.createElement("div");
+            div.className = "option";
+            div.innerText = text;
+            div.onclick = () =>
+                selectOption(div, text === correct);
+            options.appendChild(div);
+        });
+}
+
+function selectOption(el, correct) {
+    document
+        .querySelectorAll(".option")
+        .forEach(o => o.onclick = null);
+
+    if (correct) {
+        el.classList.add("correct");
+        riktig++;
+        L.splice(index, 1);
+        document.getElementById("feedback").innerText = "¡Correcto!";
+
+        updateProgress(); // ✅ OPPDATERES MED EN GANG
+    } else {
+        el.classList.add("wrong");
+        feil++;
+        document.getElementById("feedback").innerText =
+            "Respuesta correcta: " + L[index][1];
+    }
+
+    updateStats();
+
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+function updateProgress() {
+    let done = total - L.length;
+    document.getElementById("progressBar").style.width =
+        Math.round(100 * done / total) + "%";
+}
+
+function updateStats() {
+    document.getElementById("stats").innerText =
+        `Aciertos: ${riktig} | Errores: ${feil} | Restantes: ${L.length}`;
+}
+</script>
+
+</body>
+</html>
