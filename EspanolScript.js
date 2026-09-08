@@ -515,8 +515,8 @@ function checkAnswer() {
       `⚠️ Nesten riktig! 🧐
        <br>
        <small>
-       Minor spelling mistake.
-       Correct answer:
+       En liten skrivefeil.
+       Riktig svar:
        <strong>${escapeHtml(correctRaw)}</strong>
        </small>`;
   }
