@@ -1,115 +1,74 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprender Español</title>
-
-    <style>
-
-
-.space {
-            margin-top: 0.8em;
-        }
-
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Header */
-        header {
-            background: #8B0000;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        .hero {
-            background-image: url('SpanskeMeg.jpg');
-            background-size: cover;
-            background-position: center;
-            padding: 60px 20px;
-            min-height: 500px;
-            }
-
-        /* Main (oppå bildet) */
-        main {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.9em;
-            color: #555;
-            margin: 20px;
-        }
-
-        a {
-            color: #8B0000;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puggepuggepugge!</title>
+  <link rel="stylesheet" href="EspanolStyle.css">
 </head>
-
 <body>
 
-    <header>
-        <h1>La página web de Olé Henrico Mañanaestrella</h1>
-        <h2>para aprender español</h2>
-    </header>
+<a href="index.html" class="back-link">Til startsiden</a>
 
-    <div class="hero">
-        <main>
-            <h2>¡Bienvenido!</h2>
-            <p>Aquí tienes algunas sitios para aprender español.</p>
-            <p>Las escribí para noruegos que, como yo, quieren aprender español.</p>
+<div id="box">
+  <div id="intro">
+    <h1>Glosepuggeside</h1>
+  </div>
 
-            <h3>Sitios para aprender español:</h3>
-            <ul>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/BasicosALT.html">Los básicos (con alternativas)</a></li>
+  <div id="progress">
+    <div id="progressBar"></div>
+  </div>
 
-                <li class="space"><a href="https://olemunthe.github.io/aprendeEspanol/duKanSpanskALT.html">Alle kan litt spansk (med alternativer)</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/duKanSpansk.html">Alle kan litt spansk</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/sabesPalabras.html">Todos saben un poco español</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/pregunta.html">Preguntas a ti</a></li>
+  <p id="stats"></p>
+  <p id="final"></p>
 
-                <li class="space"><a href="https://olemunthe.github.io/aprendeEspanol/verbosCasiNo.html">Verbos casi noruego</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/verbosSimple.html">Verbos infinitivos</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/verbos.html">Verbos en presente</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/verbosFrases.html">Frases con verbos</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/hablar.html">Hablar - habla - habló - hablaba - hablara - hablaría </a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/hablarALT.html">Hablar - habla - habló - hablaba - hablara - hablaría (con alternativas)</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/comer.html">Comer - come - comió - comía - comerá</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/comerALT.html">Comer - come - comió - comía - comerá (con alternativas)</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/estar.html">Estar - esta - estuvo - estaba - estará - estaría </a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/ser.html">Ser - es - fue - era - será - sería </a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/ir.html">Ir - va - fue - iba - ira - iría - vaya</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/tener.html">Tener - tiene - tuvo - tenía - tendrá - tendría</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/hacer.html">Hacer - hace - hizo - hacía - hará - haría</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/venir.html">Venir - viene - vino - venía - vendrá - vendría</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/poder.html">Poder - puede - pudo - podía - podrá - podría</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/gustar.html">Gustar - gusta - gustó - gustaba - gustará - gustaría</a></li>
+  <p id="modeTitle"><strong>Velg modus</strong></p>
+  <div id="modeSelect">
+    <button onclick="setMode('mc')">Flervalg</button>
+    <button onclick="setMode('write')">Skriv ordet/uttrykket</button>
+  </div>
 
-                <li class="space"><a href="https://olemunthe.github.io/aprendeEspanol/hayEsEstas.html">¿Hay, es o está?</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/yo.html">Estoy/soy ...</a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/haber.html">Haber - he - hemos - has - habéis - ha - han </a></li>
-                <li><a href="https://olemunthe.github.io/aprendeEspanol/lolalese.html">Lo, la, le y se</a></li>
-                
-            </ul>
-        </main>
-    </div>
+  <div id="wordEntry">
+    <label for="wordList"><strong>Legg inn ordlisten</strong></label>
+    <p class="help-text">Én linje per par med ord/uttrykk. Ha komma mellom det utenlandske ordet/uttrykket og det norske.</p>
+    <textarea id="wordList" rows="10" placeholder="hola, hei&#10;muchas gracias, tusen takk&#10;adiós, ha det&#10;dónde está la playa, hvor er stranda"></textarea>
+    <p id="listError" class="list-error"></p>
+    <button id="startQuizBtn" onclick="startGame()">Start QUIZ</button>
+  </div>
 
-</body>
-</html>
-    </main>
+  <p id="question"></p>
 
+  <input id="answer" placeholder="Skriv inn svaret ditt">
+  <div id="pointPopup">+1 poeng</div>
+  <p></p>
+  <button id="responderBtn" onclick="checkAnswer()">Svar</button>
 
+  <div id="mcOptions">
+    <button onclick="checkMC(0)" id="opt0"></button>
+    <button onclick="checkMC(1)" id="opt1"></button>
+    <button onclick="checkMC(2)" id="opt2"></button>
+    <button onclick="checkMC(3)" id="opt3"></button>
+  </div>
+
+  <button id="nextBtn" onclick="nextQuestion()">Continue</button>
+  <p id="feedback"></p>
+
+<div id="restartOptions" style="display:none;">
+  <button onclick="restartSameList('mc')">
+    Start på nytt med samme liste (flervalg)
+  </button>
+
+  <button onclick="restartSameList('write')">
+    Start på nytt med samme liste (skriv inn)
+  </button>
+
+  <button onclick="newList()">
+    Lag en ny liste
+  </button>
+</div>
+
+</div>
+
+<script src="EspanolScript.js" defer></script>
 </body>
 </html>
